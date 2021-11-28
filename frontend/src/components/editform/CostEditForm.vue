@@ -5,7 +5,6 @@
         <v-icon v-if="!btnText" small>{{ btnIcon }}</v-icon>
         <span v-if="!!btnText">{{ btnText }}</span>
       </v-btn>
-      <v-snackbar v-model="snackbar" bottom color="success" :timeout="7000">{{ successMsg(name) }}</v-snackbar>
     </template>
     <v-card v-if="dialog">
       <v-card-title>
@@ -33,13 +32,12 @@
 </template>
 <script>
 export default {
-  props: ["title", "changed", "btnText", "icon", "successMsg", "name"],
+  props: ["title", "changed", "btnText", "icon"],
   data() {
     return {
       valid: false,
       dialog: false,
-      saving: false,
-      snackbar: false
+      saving: false
     };
   },
   computed: {
@@ -51,7 +49,6 @@ export default {
     success() {
       this.dialog = false;
       this.saving = false;
-      this.snackbar = true;
     }
   }
 };

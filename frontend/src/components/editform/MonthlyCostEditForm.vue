@@ -1,9 +1,9 @@
 <template>
   <cost-edit-form
-    :successMsg="successMsg('Monatliche Kosten')"
     :title="title('Monatliche Kosten')"
     :changed="changed"
     :btn-text="btnText"
+    @save="saveCost"
   >
     <v-row>
       <v-col>
@@ -27,14 +27,19 @@
 </template>
 <script>
 import CurrencyInput from "./CurrencyInput";
-import { CommonForm, monthlyCostToForm } from "../Utils";
+import { baseFormToCost, CommonForm, monthlyCostToForm } from "../Utils";
 import CostEditForm from "./CostEditForm";
 import NameTextField from "./NameTextField";
 import FromToDateFields from "./FromToDateFields";
 import IncomingSelect from "./IncomingSelect";
 
+const formToCost = form => ({
+  ...baseFormToCost(form),
+  ...form.fromTo
+})
+
 export default {
-  mixins: [CommonForm(monthlyCostToForm)],
+  mixins: [CommonForm(monthlyCostToForm, formToCost, 'Monatliche Kosten', '/api/costs/monthly')],
   components: {
     CostEditForm,
     NameTextField,

@@ -1,6 +1,6 @@
 <template>
   <cost-edit-form
-    :successMsg="successMsg('Jährliche Kosten')"
+    name="Jährliche Kosten"
     :title="title('Jährliche Kosten')"
     :changed="changed"
     :btn-text="btnText"

@@ -85,7 +85,7 @@ export const baseFormToCost = form => ({
 
 
 
-export const CommonForm = (costToForm, formToCost, endpoint) => ({
+export const CommonForm = (costToForm, formToCost, name, endpoint) => ({
 
   props: ['cost', 'add'],
   data() {
@@ -106,9 +106,6 @@ export const CommonForm = (costToForm, formToCost, endpoint) => ({
     title(name) {
       return `${name} ${this.cost && this.cost.name ? "ändern" : "hinzufügen"}`
     },
-    successMsg(name) {
-      return costName => `${name} '${costName}' erfolgreich ${this.cost && this.cost.name ? "geändert" : "hinzugefügt"}`
-    },
     saveCost: async function () {
       
       const cost = formToCost(this.form)
@@ -119,7 +116,7 @@ export const CommonForm = (costToForm, formToCost, endpoint) => ({
         }
       })
 
-      this.$refs.editform.success();
+      this.$emit('success', { cost, name, created: cost.id == null })
     }
 
   }

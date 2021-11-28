@@ -34,6 +34,7 @@
                   :entries="monthly"
                   :cols="monthlyCols"
                   formComponent="monthly-cost-edit-form"
+                  @success="success"
                 />
               </v-tab-item>
               <v-tab>Vierteljährliche Kosten</v-tab>
@@ -42,6 +43,7 @@
                   :entries="quaterly"
                   :cols="quaterlyCols"
                   formComponent="quaterly-cost-edit-form"
+                  @success="success"
                 />
               </v-tab-item>
               <v-tab>Halbjährliche Kosten</v-tab>
@@ -50,6 +52,7 @@
                   :entries="halfyearly"
                   :cols="halfyearlyCols"
                   formComponent="halfyearly-cost-edit-form"
+                  @success="success"
                 />
               </v-tab-item>
               <v-tab>Jährliche Kosten</v-tab>
@@ -58,11 +61,19 @@
                   :entries="yearly"
                   :cols="yearlyCols"
                   formComponent="yearly-cost-edit-form"
+                  @success="success"
                 />
               </v-tab-item>
             </v-tabs>
           </v-card>
         </v-skeleton-loader>
+        <v-snackbar 
+          v-model="snackbar" 
+          bottom 
+          color="success" 
+          :timeout="7000">
+            {{ successMsg }}
+        </v-snackbar>
       </v-col>
     </v-row>
   </v-container>
@@ -113,6 +124,7 @@ const yearlyCols = cols([
   { name: "dueMonth", label: "Fällig im", transformer: toMonth }
 ]);
 
+
 export default {
   mixins: [LoadablePage],
   components: {
@@ -132,7 +144,10 @@ export default {
       monthlyCols: cols(),
       quaterlyCols,
       halfyearlyCols,
-      yearlyCols
+      yearlyCols,
+
+      snackbar: false,
+      successMsg: ""
     };
   },
   computed: {
@@ -140,21 +155,39 @@ export default {
       return `${this.currentBalance} €`;
     }
   },
-  created: async function() {
-    const data = await this.fetchData("/api/costs");
-    this.monthly = data.monthly;
-    this.quaterly = data.quaterly;
-    this.halfyearly = data.halfyearly;
-    this.yearly = data.yearly;
+  methods: {
+    success: async function(value) {
+      console.log(value);
 
-    this.currentBalance = data.currentBalance;
+      const {name, cost, created} = value;
+
+      this.snackbar = true;
+      this.successMsg = 
+        `${name} '${cost.name}' erfolgreich ${created ? "hinzugefügt" : "geändert"}`
+
+      this.loadData();
+    },
+    loadData: async function() {
+      const data = await this.fetchData("/api/costs");
+
+      this.monthly = data.monthly;
+      this.quaterly = data.quaterly;
+      this.halfyearly = data.halfyearly;
+      this.yearly = data.yearly;
+
+      this.currentBalance = data.currentBalance; 
+    }
+  },
+
+  created: async function() {
+    this.loadData();
   }
 };
 </script>
 
 <style scoped>
 strong.red {
-  color: red;
+  color: goldenrod;
 }
 .tabs {
   width: 100%;

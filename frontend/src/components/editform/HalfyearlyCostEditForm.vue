@@ -1,6 +1,6 @@
 <template>
   <cost-edit-form
-    :successMsg="successMsg('Halbjährige Kosten')"
+    name="Halbjährige Kosten"
     :title="title('Halbjährige Kosten')"
     :changed="changed"
     :btn-text="btnText"

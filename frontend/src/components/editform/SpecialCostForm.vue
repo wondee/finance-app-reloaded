@@ -2,11 +2,10 @@
   <cost-edit-form
     ref="editform"
     :title="title('Sonderkosten Kosten')"
-    :successMsg="successMsg('Sonderkosten Kosten')"
+    name="Sonderkosten Kosten"
     :changed="changed"
     :btn-text="btnText"
     :icon="icon"
-    :name="form.name"
     @save="saveCost"
   >
     <v-row>

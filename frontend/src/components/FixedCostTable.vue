@@ -15,7 +15,11 @@
     </v-card-text>
 
     <v-card-actions>
-      <component :is="formComponent" btn-text="Neue Kosten Hinzufügen" />
+      <component 
+        :is="formComponent" 
+        btn-text="Neue Kosten Hinzufügen"
+        v-on="$listeners" 
+      />
     </v-card-actions>
   </v-card>
 </template>
