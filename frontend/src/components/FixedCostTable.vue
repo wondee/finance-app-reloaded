@@ -9,7 +9,11 @@
           <responsive-date-col :entry="slotProps.entry" />
         </template>
         <template v-slot:edit-button="slotProps">
-          <component :is="formComponent" :cost="slotProps.entry" />
+          <component 
+            :is="formComponent" 
+            :cost="slotProps.entry" 
+            v-on="$listeners"
+          />
         </template>
       </cost-table>
     </v-card-text>
