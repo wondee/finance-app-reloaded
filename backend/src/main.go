@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"net/http"
 
 	"github.com/gin-gonic/gin"
 	"gorm.io/driver/postgres"
@@ -29,7 +30,6 @@ func UserMiddleware(c *gin.Context) {
 	fmt.Println("User found ", userId)
 
 	c.Set("currentUser", userId)
-
 }
 
 func ConnectDataBase() {
@@ -82,6 +82,23 @@ func main() {
 	router.POST("/api/specialcosts", SaveSpecialCosts)
 	router.DELETE("/api/specialcosts/:id", DeleteSpecialCosts)
 
+	if gin.Mode() == "debug" {
+		router.GET("/.auth/me", getAuthMe)
+	}
+
 	router.Run("localhost:8082")
 
+}
+
+func getAuthMe(c *gin.Context) {
+	jsonData := []byte(`
+		[{
+			"user_claims":[
+				{"typ":"name", "val":"Ante Rebic"}
+			],
+			"user_id": "testee@gmail.com"
+		}]
+	`)
+
+	c.Data(http.StatusOK, "application/json", jsonData)
 }

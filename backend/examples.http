@@ -26,6 +26,8 @@ content-type: application/json
 GET http://localhost:8082/api/user
 X-MS-CLIENT-PRINCIPAL-ID: testeeWithout@gmail.com
 ###
+GET http://localhost:8082/.auth/me
+###
 PUT http://localhost:8082/api/user
 X-MS-CLIENT-PRINCIPAL-ID: testee2@gmail.com
 ###
@@ -38,3 +40,5 @@ GET http://localhost:8082/api/specialcosts
 DELETE http://localhost:8082/api/specialcosts/2
 ###
 GET http://localhost:8082/api/overview/all
+X-MS-CLIENT-PRINCIPAL-ID: testee@gmail.com
+

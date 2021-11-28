@@ -1,7 +1,7 @@
 <template>
 <layout :user="user">
   <router-view v-if="user"/>
-  <v-container>
+  <v-container v-else>
     <v-row>
       <v-col>
         <h1>Loading User...</h1> 

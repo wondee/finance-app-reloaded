@@ -13,12 +13,22 @@ type User struct {
 type Finance struct {
 	ID int `gorm:primary_key`
 
+	Amount int
 	//SpecialCosts *[]SpecialCost
 	//FixedCost    *[]FixedCost
 }
 
 func LoadCurrentFinanceId(c *gin.Context) int {
 	return LoadCurrentUser(c).FinanceID
+}
+
+func LoadCurrentFinance(c *gin.Context) *Finance {
+	financeID := LoadCurrentUser(c).FinanceID
+
+	var finance Finance
+	DB.Where("id = ?", financeID).First(&finance)
+
+	return &finance
 }
 
 func LoadCurrentUser(c *gin.Context) *User {

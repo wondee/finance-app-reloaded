@@ -37,7 +37,7 @@ type OverviewDetail struct {
 }
 
 func GetOverview(c *gin.Context) {
-	c.IndentedJSON(http.StatusOK, createOverview(LoadCurrentFinanceId(c)))
+	c.IndentedJSON(http.StatusOK, createOverview(LoadCurrentFinance(c)))
 }
 
 func GetOverviewDetail(c *gin.Context) {
@@ -109,14 +109,14 @@ func determineDisplayType(dueMonth []int) string {
 	}
 }
 
-func createOverview(financeId int) Overview {
+func createOverview(finance *Finance) Overview {
 	// TODO retrieve current amount
 
-	currentAmount := 3000
+	currentAmount := finance.Amount
 	entries := make([]OverviewEntry, MAX_ENTRIES)
 
-	relevantFixedCostsMap := createRelevantMap(financeId)
-	specialCostMap := createSpecialCostMap(financeId)
+	relevantFixedCostsMap := createRelevantMap(finance.ID)
+	specialCostMap := createSpecialCostMap(finance.ID)
 
 	tmpAmount := currentAmount
 	tmpYearMonth := CurrentYearMonth()
