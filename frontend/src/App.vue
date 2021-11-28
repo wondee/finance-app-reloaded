@@ -1,5 +1,5 @@
 <template>
-<layout>
+<layout :user="user">
   <router-view v-if="user"/>
   <v-container>
     <v-row>
@@ -10,7 +10,6 @@
   </v-container>
 </layout>
 </template>
-
 <script>
 import VueRouter from "vue-router";
 import Layout from "./Layout";
@@ -40,8 +39,34 @@ export default {
     }
   },
   created: async function() {
-    const data = await fetch("/api/user");
-    console.log(data)
+    const response = await fetch("/api/user");
+
+    if (response.status === 404) {
+      const response = await fetch("/api/user", {
+        method: "PUT"
+      })
+
+      if (!response.ok) {
+        throw new Error(response)
+      }
+    }
+
+    const userDetailsResponse = await fetch("/.auth/me");
+
+    if (!userDetailsResponse.ok) {
+      throw new Error(userDetailsResponse) 
+    }
+
+    const authData = await userDetailsResponse.json()
+
+    const name = authData[0].user_claims.find(
+      elem => elem.typ === "name"
+    )
+
+    this.user = {
+      id: authData.user_id,
+      name: name.val
+    }
 
   }
 };

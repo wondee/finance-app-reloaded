@@ -56,6 +56,8 @@
     <v-app-bar app clipped-left>
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
       <v-toolbar-title>Finanz-App</v-toolbar-title>
+      <v-spacer></v-spacer>
+      <v-toolbar-title v-if="user">{{ user.name }}</v-toolbar-title>
     </v-app-bar>
 
     <v-content>
@@ -73,6 +75,7 @@
 
 <script>
 export default {
+  props: ["user"],
   data: () => ({
     drawer: null
   }),

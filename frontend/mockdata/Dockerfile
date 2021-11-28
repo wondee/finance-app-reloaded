@@ -4,8 +4,8 @@ WORKDIR /app
 
 RUN npm install -g mockserver
 
-COPY ./ /app/
+COPY ./ ./
 
 EXPOSE 8080
 
-ENTRYPOINT ["mockserver", "-p 8080", "-m /app/"]
+ENTRYPOINT ["mockserver", "-p 8080", "-m ./"]
