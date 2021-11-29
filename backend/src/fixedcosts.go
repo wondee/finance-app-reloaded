@@ -3,7 +3,9 @@ package main
 import (
 	"errors"
 	"net/http"
+	"sort"
 	"strconv"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 )
@@ -133,8 +135,12 @@ func createFixedCosts(financeId int) Response {
 		default:
 			panic("only 1, 2, 4 and 12 is valid, but was " + strconv.Itoa(month))
 		}
-
 	}
+
+	sortFixedCosts(monthly)
+	sortFixedCosts(quaterly)
+	sortFixedCosts(halfyearly)
+	sortFixedCosts(yearly)
 
 	return Response{
 		CurrentBalance: currentBalance,
@@ -143,6 +149,12 @@ func createFixedCosts(financeId int) Response {
 		Halfyearly:     halfyearly,
 		Yearly:         yearly,
 	}
+}
+
+func sortFixedCosts(array []JsonFixedCost) {
+	sort.Slice(array, func(a, b int) bool {
+		return strings.ToLower(array[a].Name) < strings.ToLower(array[b].Name)
+	})
 }
 
 func ToJsonStruct(dbObject *FixedCost) JsonFixedCost {

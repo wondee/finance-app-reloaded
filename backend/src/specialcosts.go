@@ -2,7 +2,9 @@ package main
 
 import (
 	"net/http"
+	"sort"
 	"strconv"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 )
@@ -63,6 +65,10 @@ func createSpecialCosts(financeId int) (result []JsonSpecialCost) {
 			DueDate: cost.DueDate,
 		})
 	}
+
+	sort.Slice(result, func(a, b int) bool {
+		return strings.ToLower(result[a].Name) < strings.ToLower(result[b].Name)
+	})
 
 	return
 }
