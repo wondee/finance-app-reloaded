@@ -10,16 +10,17 @@
         <v-card-title>
           <span>Aktuellen Betrag ändern</span>
         </v-card-title>
-        <v-form v-model="valid">
+        <v-form v-model="valid" @submit="updateAmount">
           <v-container>
             <currency-input label="Betrag" v-model="newAmount" />
           </v-container>
+        
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn text @click="show = false">Abbrechen</v-btn>
+            <v-btn text type="submit">Speichern</v-btn>
+          </v-card-actions>
         </v-form>
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn text @click="show = false">Abbrechen</v-btn>
-          <v-btn text @click="show = false">Speichern</v-btn>
-        </v-card-actions>
       </v-card>
     </v-dialog>
   </v-banner>
@@ -43,6 +44,18 @@ export default {
       show: false,
       newAmount: this.currentAmount
     };
+  },
+  methods: {
+    updateAmount: async function() {
+      
+      await fetch("/api/amount", {
+        method: 'post', body: JSON.stringify({ value: this.newAmount }), headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+
+      this.$emit('saved', { newAmount: this.newAmount })
+    }
   }
 };
 </script>

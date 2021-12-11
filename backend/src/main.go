@@ -68,6 +68,8 @@ func main() {
 	router.GET("/api/user", GetUser)
 	router.PUT("/api/user", PutUser)
 
+	router.POST("/api/amount", SaveAmount)
+
 	router.GET("/api/overview/all", GetOverview)
 	router.GET("/api/overview/detail", GetOverviewDetail)
 

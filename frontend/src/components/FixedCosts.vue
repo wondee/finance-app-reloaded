@@ -191,6 +191,8 @@ export default {
       this.yearly = data.yearly;
 
       this.currentBalance = data.currentBalance; 
+
+      this.loaded = true;
     }
   },
 

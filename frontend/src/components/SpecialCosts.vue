@@ -77,6 +77,7 @@ export default {
   created: async function() {
     const data = await this.fetchData("/api/specialcosts");
     this.entries = data;
+    this.loaded = true;
   }
 };
 </script>

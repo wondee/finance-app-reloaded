@@ -44,6 +44,11 @@ func LoadCurrentUser(c *gin.Context) *User {
 	return &user
 }
 
+func UpdateAmount(c *gin.Context, value int) {
+	finance := LoadCurrentFinance(c)
+	DB.Model(&Finance{}).Where("id = ?", finance.ID).Update("amount", value)
+}
+
 func CreateUser(userId string) int {
 	finance := &Finance{}
 

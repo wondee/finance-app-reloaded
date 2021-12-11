@@ -23,6 +23,13 @@ content-type: application/json
   }
 }
 ###
+POST http://localhost:8082/api/amount
+content-type: application/json
+
+{
+  "value": 1200
+}
+###
 GET http://localhost:8082/api/user
 X-MS-CLIENT-PRINCIPAL-ID: testeeWithout@gmail.com
 ###

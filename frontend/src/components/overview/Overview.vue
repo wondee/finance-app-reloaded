@@ -24,7 +24,10 @@
           transition="scale-transition"
           class="mx-auto"
         >
-          <current-amount :currentAmount="currentAmount" />
+          <current-amount 
+            :currentAmount="currentAmount" 
+            @saved="amountUpdated"
+          />
         </v-skeleton-loader>
       </v-col>
     </v-row>
@@ -38,6 +41,13 @@
         >
           <overview-table :entries="entries" />
         </v-skeleton-loader>
+        <v-snackbar 
+          v-model="snackbar" 
+          bottom 
+          color="success" 
+          :timeout="7000">
+            {{ successMsg }}
+        </v-snackbar>
       </v-col>
     </v-row>
   </v-container>
@@ -63,6 +73,9 @@ export default {
       currentAmount: 0,
 
       config: { showChart: true },
+      
+      snackbar: false,
+      successMsg: null
     };
   },
   computed: {
@@ -71,15 +84,27 @@ export default {
     }
   },
   created: async function() {
-    const result = await this.fetchData("/api/overview/all");
+    this.loadData();
 
     var storageShowChart = localStorage.getItem("finance-config.showChart");
     this.config.showChart = storageShowChart == "true";
-
-    this.entries = result.entries;
-    this.currentAmount = result.currentAmount;
   },
-  methods: {
+  methods: {    
+    amountUpdated: async function() {
+      this.snackbar = true;
+      this.successMsg = `Betrag erfolgreich geändert.`;
+
+      this.loadData();
+    },
+    loadData: async function() {
+      const result = await this.fetchData("/api/overview/all");
+
+      this.entries = result.entries;
+      this.currentAmount = result.currentAmount;
+
+      this.loaded = true;
+    },
+
     showGraphic: function() {
       this.config.showChart = true;
       localStorage.setItem("finance-config.showChart", "true");

@@ -36,6 +36,23 @@ type OverviewDetail struct {
 	SpecialCosts []CostDetail      `json:"specialCosts"`
 }
 
+type Amount struct {
+	Value int `json:"value"`
+}
+
+func SaveAmount(c *gin.Context) {
+	var amount Amount
+	err := c.ShouldBindJSON(&amount)
+
+	if err != nil {
+		c.Status(http.StatusBadRequest)
+		return
+	}
+
+	UpdateAmount(c, amount.Value)
+
+}
+
 func GetOverview(c *gin.Context) {
 	c.IndentedJSON(http.StatusOK, createOverview(LoadCurrentFinance(c)))
 }

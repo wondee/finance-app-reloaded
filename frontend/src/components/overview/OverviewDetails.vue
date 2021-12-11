@@ -82,6 +82,7 @@ export default {
       );
       this.fixedCosts = result.fixedCosts || [];
       this.specialCosts = result.specialCosts || [];
+      this.loaded = true;
     },
     deleteSpecialCost(id) {
       // TODO implement me

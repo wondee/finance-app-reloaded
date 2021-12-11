@@ -1,9 +1,9 @@
 <template>
   <v-text-field
     :value="displayValue"
-    :rules="valueRules"
-    @blur="inputChanged"
+    @blur="focus = false;"
     @focus="focus = true"
+    @change="inputChanged"
     required
     :label="label"
   />
@@ -16,10 +16,6 @@ export default {
   data() {
     return {
       focus: false,
-
-      valueRules: [
-        v => parseInt(v) > 0 || 'Betrag muss positiv und ungleich 0 sein',
-      ],
     }
   },
   
@@ -30,10 +26,9 @@ export default {
   },
   methods: {
     inputChanged(e) {
-      const newValue = Number(e.target.value);
+      const newValue = Number(e);
       
       this.$emit("input", isNaN(newValue) ? 0 : newValue);
-      this.focus = false;
     }
   }
 };

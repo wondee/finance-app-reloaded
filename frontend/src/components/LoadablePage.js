@@ -10,7 +10,6 @@ export default {
       this.loaded = false;
       const response = await fetch(url);
       const result = await response.json();
-      this.loaded = true;
       return result;
     }
   }
