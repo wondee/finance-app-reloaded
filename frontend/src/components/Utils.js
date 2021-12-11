@@ -28,6 +28,9 @@ export const displayMonth = (yearMonth, responsive = true, empty = '-') => {
   return `${displayMonth} / ${year}`;
 } 
 
+export const createDateString = ({ year, month }) => 
+  year + '-' + (month < 10 ? '0' : '') + month;
+
 const delimiter = (list) => list.length > 2 ? ', ' : ' und ';
 
 const createMonthStrings = p =>
@@ -36,12 +39,12 @@ const createMonthStrings = p =>
     .map(list => list.map(month => monthMap[month - 1]).join(delimiter(list)));
 
 
-export const quaterlyStrings = createMonthStrings(4);
+export const quarterlyStrings = createMonthStrings(4);
 export const healfyearlyStrings = createMonthStrings(2);
 
-export const toQuaterlyDueDate = dueDate => quaterlyStrings[dueDate - 1];
-export const toHalfyearlyDueDate = dueDate => healfyearlyStrings[dueDate - 1];
-export const toMonth = month => monthMap[month - 1];
+export const toQuarterlyDueDate = dueDate => quarterlyStrings[dueDate];
+export const toHalfyearlyDueDate = dueDate => healfyearlyStrings[dueDate];
+export const toMonth = month => monthMap[month];
 
 export const toSelectItems = (list) => list.map((text, value) => ({ text, value }))
 
@@ -83,8 +86,6 @@ export const baseFormToCost = form => ({
   amount: form.amount * (form.incoming ? 1 : -1),
 })
 
-
-
 export const CommonForm = (costToForm, formToCost, name, endpoint) => ({
 
   props: ['cost', 'add'],
@@ -107,7 +108,6 @@ export const CommonForm = (costToForm, formToCost, name, endpoint) => ({
       return `${name} ${this.cost && this.cost.name ? "ändern" : "hinzufügen"}`
     },
     saveCost: async function () {
-      
       const cost = formToCost(this.form)
       
       await fetch(endpoint, {

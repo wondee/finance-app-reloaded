@@ -19,7 +19,7 @@
             <slot name="content" :entry="entry" />
             <td align="right" class="action-cell">
               <slot name="edit-button" :entry="entry" />
-              <delete-button :name="entry.name" @confirm="$emit('delelete-clicked', entry)"/>
+              <delete-button :name="entry.name" @confirm="() => $emit('delete', entry)"/>
             </td>
           </tr>
         </tbody>
@@ -37,11 +37,7 @@ export default {
     DeleteButton
   },
   props: ["entries", "cols"],
-  data() {
-    return {
-      showDelete: false
-    }
-  },
+  
   methods: {
     transform: (f, v) => (f ? f(v) : v),
     filter(cols) {

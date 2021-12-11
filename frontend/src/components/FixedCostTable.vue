@@ -1,7 +1,7 @@
 <template>
   <v-card>
     <v-card-text>
-      <cost-table :entries="entries" :cols="cols">
+      <cost-table :entries="entries" :cols="cols" v-on="$listeners">
         <template v-if="$vuetify.breakpoint.smAndDown" v-slot:header>
           <th />
         </template>
@@ -31,7 +31,7 @@
 import CostTable from "./CostTable";
 import ResponsiveDateCol from "./ResponsiveDateCol";
 import MonthlyCostEditForm from "./editform/MonthlyCostEditForm";
-import QuaterlyCostEditForm from "./editform/QuaterlyCostEditForm";
+import QuarterlyCostEditForm from "./editform/QuarterlyCostEditForm";
 import HalfyearlyCostEditForm from "./editform/HalfyearlyCostEditForm";
 import YearlyCostEditForm from "./editform/YearlyCostEditForm";
 
@@ -43,7 +43,7 @@ export default {
     CostTable,
     ResponsiveDateCol,
     MonthlyCostEditForm,
-    QuaterlyCostEditForm,
+    QuarterlyCostEditForm,
     HalfyearlyCostEditForm,
     YearlyCostEditForm
   }

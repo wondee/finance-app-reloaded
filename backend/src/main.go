@@ -76,7 +76,7 @@ func main() {
 	router.POST("/api/costs/monthly", SaveMonthlyFixedCosts)
 	router.POST("/api/costs/halfyearly", SaveHalfYearlyFixedCosts)
 	router.POST("/api/costs/yearly", SaveYearlyFixedCosts)
-	router.POST("/api/costs/quaterly", SaveQuaterlyFixedCosts)
+	router.POST("/api/costs/quarterly", SaveQuarterlyFixedCosts)
 
 	router.GET("/api/specialcosts", GetSpecialCosts)
 	router.POST("/api/specialcosts", SaveSpecialCosts)

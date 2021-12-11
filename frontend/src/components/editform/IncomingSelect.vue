@@ -1,7 +1,7 @@
 <template>
   <v-checkbox
-    :input-value="value"
-    @input="$emit('change', $event)"
+    :input-value="checked"
+    @change="changed"
     hint="Anhacken, wenn es sich bei dem Betrag um einen eingehenden (z.B. Gehalt) handelt."
     persistent-hint
     label="Eingehend"
@@ -10,7 +10,17 @@
 </template>
 <script>
 export default {
-  props: ["value"]
+  props: ["value"],
+  data() {
+    return {
+      checked: !!this.value
+    }
+  }, 
+  methods: {
+    changed(e) {
+      this.$emit("input", e);
+    }
+  }
 };
 </script>
 

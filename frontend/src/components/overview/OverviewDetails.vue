@@ -84,6 +84,7 @@ export default {
       this.specialCosts = result.specialCosts || [];
     },
     deleteSpecialCost(id) {
+      // TODO implement me
       window.console.log("delete", id);
     }
   }

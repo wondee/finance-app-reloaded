@@ -19,7 +19,6 @@ module.exports = {
       filename: 'index.html',
       title: 'Index Page',
       chunks: ['chunk-vendors', 'chunk-common', 'index']
-    },
-    login: 'src/login/login.js'
+    }
   }
 }

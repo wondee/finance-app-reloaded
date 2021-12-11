@@ -2,6 +2,7 @@ package main
 
 import (
 	"errors"
+	"fmt"
 	"net/http"
 	"sort"
 	"strconv"
@@ -70,10 +71,10 @@ func SaveHalfYearlyFixedCosts(c *gin.Context) {
 	})
 }
 
-func SaveQuaterlyFixedCosts(c *gin.Context) {
+func SaveQuarterlyFixedCosts(c *gin.Context) {
 	saveFixedCost(c, func(dueMonth int) ([]int, error) {
 		if dueMonth < 0 || dueMonth > 3 {
-			return nil, errors.New("dueMonth for halfyearly must be between 1 and 3")
+			return nil, errors.New("dueMonth for quarterly must be between 1 and 3")
 		}
 
 		return []int{dueMonth, dueMonth + 3, dueMonth + 6, dueMonth + 9}, nil
@@ -91,6 +92,7 @@ func saveFixedCost(c *gin.Context, dueMonthConverter func(int) ([]int, error)) {
 	err := c.ShouldBindJSON(&cost)
 
 	if err != nil {
+		fmt.Println("Error parsing JSON", err)
 		c.Status(http.StatusBadRequest)
 		return
 	}

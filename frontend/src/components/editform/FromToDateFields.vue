@@ -10,6 +10,7 @@
 </template>
 <script>
 import MonthDatePicker from './MonthDatePicker'
+import { createDateString } from "../Utils";
 
 export default {
   props: ['value'],
@@ -20,9 +21,9 @@ export default {
     return {
       toDateRules: [
         d =>
-          !d ||
-          !this.value.from ||
-          new Date(d) >= new Date(this.value.from) ||
+          d &&
+          this.value.from &&
+          new Date(createDateString(d)) < new Date(createDateString(this.value.from)) &&
           "'Gültig bis' darf nicht kleiner als 'Gültig ab' sein"
       ]
     }

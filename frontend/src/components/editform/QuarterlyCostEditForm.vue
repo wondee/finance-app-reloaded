@@ -1,9 +1,9 @@
 <template>
   <cost-edit-form
-    name="Vierteljährliche Kosten"
-    :tiele="title('Vierteljährliche Kosten')"
+    :title="title('Vierteljährliche Kosten')"
     :changed="changed"
     :btn-text="btnText"
+    @save="saveCost"
   >
     <v-row>
       <v-col>
@@ -35,13 +35,21 @@ import CurrencyInput from "./CurrencyInput";
 import {
   CommonForm,
   monthlyCostToForm,
-  quaterlyStrings,
-  toSelectItems
+  quarterlyStrings,
+  toSelectItems,
+  baseFormToCost
 } from "../Utils";
 import CostEditForm from "./CostEditForm";
 import NameTextField from "./NameTextField";
 import FromToDateFields from "./FromToDateFields";
 import IncomingSelect from "./IncomingSelect";
+
+
+const formToCost = form => ({
+  ...baseFormToCost(form),
+  ...form.fromTo,
+  dueMonth: form.dueMonth
+})
 
 const costToForm = cost => {
   const form = monthlyCostToForm(cost);
@@ -52,12 +60,12 @@ const costToForm = cost => {
       }
     : {
         ...form,
-        dueMonth: cost.dueMonth - 1
+        dueMonth: cost.dueMonth
       };
 };
 
 export default {
-  mixins: [CommonForm(costToForm)],
+  mixins: [CommonForm(costToForm, formToCost, 'Vierteljährliche Kosten', '/api/costs/quarterly')],
   components: {
     CostEditForm,
     NameTextField,
@@ -68,7 +76,7 @@ export default {
   props: ["btnText"],
   data() {
     return {
-      items: toSelectItems(quaterlyStrings)
+      items: toSelectItems(quarterlyStrings)
     };
   }
 };

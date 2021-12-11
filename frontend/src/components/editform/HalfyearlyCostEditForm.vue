@@ -1,9 +1,9 @@
 <template>
   <cost-edit-form
-    name="Halbjährige Kosten"
     :title="title('Halbjährige Kosten')"
     :changed="changed"
     :btn-text="btnText"
+    @save="saveCost"
   >
     <v-row>
       <v-col>
@@ -36,12 +36,20 @@ import {
   CommonForm,
   monthlyCostToForm,
   toSelectItems,
-  healfyearlyStrings
+  healfyearlyStrings,
+  baseFormToCost
 } from "../Utils";
 import CostEditForm from "./CostEditForm";
 import NameTextField from "./NameTextField";
 import FromToDateFields from "./FromToDateFields";
 import IncomingSelect from "./IncomingSelect";
+
+
+const formToCost = form => ({
+  ...baseFormToCost(form),
+  ...form.fromTo,
+  dueMonth: form.dueMonth
+})
 
 const costToForm = cost => {
   const form = monthlyCostToForm(cost);
@@ -57,7 +65,7 @@ const costToForm = cost => {
 };
 
 export default {
-  mixins: [CommonForm(costToForm)],
+  mixins: [CommonForm(costToForm, formToCost, 'Halbjährliche Kosten', '/api/costs/halfyearly')],
   components: {
     CostEditForm,
     NameTextField,

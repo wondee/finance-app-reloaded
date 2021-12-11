@@ -25,12 +25,12 @@
       type="month"
       color="blue"
       :min="minDate"
-      :max="max"
+      :max="maxDate"
     />
   </v-menu>
 </template>
 <script>
-import { displayMonth } from "../Utils";
+import { displayMonth, createDateString } from "../Utils";
 
 const nowDate = new Date();
 
@@ -49,18 +49,21 @@ export default {
       return displayMonth(this.value, false, null);
     },
     date() {
-      return this.value ? this.value.year + '-' + this.value.month : null;
+      return this.value ? createDateString(this.value) :  null;
     },
     minDate() {
-      return this.min || this.now;
-    }
+      return this.min ? createDateString(this.min) : this.now;
+    },
+    maxDate() {
+      return this.max ? createDateString(this.max) : "2100-12";
+    },
   },
   methods: {
     input(e) {
 
       const createYearMonth = () => {
         const elems = e.split('-')
-        return {year: elems[0], month: elems[1]}
+        return {year: Number(elems[0]), month: Number(elems[1])}
       }
 
       const inputYearMonth = e ? createYearMonth() : e;
