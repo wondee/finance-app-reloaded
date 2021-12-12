@@ -11,9 +11,9 @@ import (
 
 type JsonSpecialCost struct {
 	ID      int        `json:"id"`
-	Name    string     `json:"name"`
-	Amount  int        `json:"amount"`
-	DueDate *YearMonth `json:"dueDate"`
+	Name    string     `json:"name" binding:"required"`
+	Amount  int        `json:"amount" binding:"required"`
+	DueDate *YearMonth `json:"dueDate" binding:"required"`
 }
 
 func GetSpecialCosts(c *gin.Context) {
@@ -37,7 +37,12 @@ func SaveSpecialCosts(c *gin.Context) {
 		FinanceID: LoadCurrentFinanceId(c),
 	}
 
-	SaveSpecialCost(&dbObject)
+	err = SaveSpecialCost(LoadCurrentFinanceId(c), &dbObject)
+
+	if err != nil {
+		c.Status(http.StatusBadRequest)
+		return
+	}
 }
 
 func DeleteSpecialCosts(c *gin.Context) {

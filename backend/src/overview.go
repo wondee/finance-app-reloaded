@@ -37,7 +37,7 @@ type OverviewDetail struct {
 }
 
 type Amount struct {
-	Value int `json:"value"`
+	Value int `json:"value" binding:"required"`
 }
 
 func SaveAmount(c *gin.Context) {
@@ -127,8 +127,6 @@ func determineDisplayType(dueMonth []int) string {
 }
 
 func createOverview(finance *Finance) Overview {
-	// TODO retrieve current amount
-
 	currentAmount := finance.Amount
 	entries := make([]OverviewEntry, MAX_ENTRIES)
 

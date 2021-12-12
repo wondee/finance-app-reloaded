@@ -13,7 +13,7 @@
         :label="label"
         prepend-icon="fa-calendar-week"
         :error-messages="errorMessages"
-        clearable
+        :clearable="!required"
         clear-icon="mdi-close"
         readonly
         v-on="on"
@@ -34,8 +34,10 @@ import { displayMonth, createDateString } from "../Utils";
 
 const nowDate = new Date();
 
+const requiredRule = v => !!v || 'Datum darf nicht leer sein';
+
 export default {
-  props: ["value", "min", "max", "label", "rules"],
+  props: ["value", "min", "max", "label", "rules", "required"],
 
   data() {
     return {
@@ -57,10 +59,13 @@ export default {
     maxDate() {
       return this.max ? createDateString(this.max) : "2100-12";
     },
+    internalRules() {
+      return [(this.required ? requiredRule : () => false), ... (this.rules || [])]
+    }
   },
   methods: {
     input(e) {
-
+      console.log('input', this.internalRules)
       const createYearMonth = () => {
         const elems = e.split('-')
         return {year: Number(elems[0]), month: Number(elems[1])}
@@ -72,9 +77,9 @@ export default {
 
       this.errorMessages = [];
 
-      if (!this.rules) return;
+      if (!this.internalRules) return;
 
-      this.rules.forEach(rule => {
+      this.internalRules.forEach(rule => {
         const result = rule(e);
         if (typeof result === "string") {
           this.errorMessages.push(result);

@@ -1,5 +1,7 @@
 package main
 
+import "errors"
+
 type SpecialCost struct {
 	ID        int `gorm:primary_key`
 	Name      string
@@ -14,13 +16,22 @@ func LoadSpecialCosts(financeId int) *[]SpecialCost {
 	return &specialCosts
 }
 
-func SaveSpecialCost(cost *SpecialCost) {
+func SaveSpecialCost(financeId int, cost *SpecialCost) error {
+
+	costs := LoadFixedCosts(financeId)
+
+	if len(*costs) >= MAX_COSTS {
+		return errors.New("max count of specialcosts already filled")
+	}
+
 	if cost.ID == 0 {
 		DB.Create(cost)
 	} else {
 		checkPermission(cost.ID, cost.FinanceID)
 		DB.Save(cost)
 	}
+
+	return nil
 }
 
 func DeleteSpecialCost(id int, financeId int) {

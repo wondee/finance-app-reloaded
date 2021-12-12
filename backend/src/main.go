@@ -10,6 +10,8 @@ import (
 	"gorm.io/gorm/logger"
 )
 
+const MAX_COSTS = 50
+
 var DB *gorm.DB
 
 const MOCK_USER = "testee@gmail.com"

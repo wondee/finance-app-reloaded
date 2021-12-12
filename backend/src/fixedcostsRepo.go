@@ -2,6 +2,7 @@ package main
 
 import (
 	"database/sql/driver"
+	"errors"
 	"strconv"
 	"strings"
 )
@@ -28,7 +29,13 @@ func LoadFixedCosts(financeId int) *[]FixedCost {
 	return &costs
 }
 
-func SaveFixedObject(cost *FixedCost) {
+func SaveFixedObject(financeId int, cost *FixedCost) error {
+
+	costs := LoadFixedCosts(financeId)
+
+	if len(*costs) >= MAX_COSTS {
+		return errors.New("max count of costs already filled")
+	}
 
 	if cost.ID == 0 {
 		DB.Create(cost)
@@ -37,6 +44,7 @@ func SaveFixedObject(cost *FixedCost) {
 		DB.Save(cost)
 	}
 
+	return nil
 }
 
 func DeleteFixedCost(id int, financeId int) {
@@ -55,6 +63,8 @@ func (this *months) Scan(value interface{}) error {
 		value, err := strconv.Atoi(month)
 		if err == nil {
 			*this = append(*this, value)
+		} else {
+			return err
 		}
 	}
 
@@ -75,7 +85,7 @@ func (this months) Value() (driver.Value, error) {
 		}
 	}
 
-	return result, nil
+	return strings.TrimSpace(result), nil
 
 }
 

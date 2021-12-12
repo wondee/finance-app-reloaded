@@ -22,7 +22,11 @@
     </v-row>
     <v-row>
       <v-col>
-        <month-date-picker v-model="form.dueDate" label="Fällig am" />
+        <month-date-picker 
+          v-model="form.dueDate" 
+          label="Fällig am" 
+          required="true"
+        />
       </v-col>
     </v-row>
   </cost-edit-form>

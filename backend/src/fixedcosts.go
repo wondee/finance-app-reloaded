@@ -27,8 +27,8 @@ type Balance struct {
 
 type JsonFixedCost struct {
 	ID       int        `json:"id"`
-	Name     string     `json:"name"`
-	Amount   int        `json:"amount"`
+	Name     string     `json:"name" binding:"required"`
+	Amount   int        `json:"amount" binding:"required"`
 	From     *YearMonth `json:"from"`
 	To       *YearMonth `json:"to"`
 	DueMonth int        `json:"dueMonth"`
@@ -106,7 +106,12 @@ func saveFixedCost(c *gin.Context, dueMonthConverter func(int) ([]int, error)) {
 
 	dbObject.FinanceID = LoadCurrentFinanceId(c)
 
-	SaveFixedObject(dbObject)
+	err = SaveFixedObject(LoadCurrentFinanceId(c), dbObject)
+
+	if err != nil {
+		c.Status(http.StatusBadRequest)
+		return
+	}
 }
 
 func createFixedCosts(financeId int) Response {
