@@ -1,11 +1,8 @@
 <template>
   <cost-edit-form
-    ref="editform"
     :title="title('Sonderkosten Kosten')"
-    name="Sonderkosten Kosten"
     :changed="changed"
     :btn-text="btnText"
-    :icon="icon"
     @save="saveCost"
   >
     <v-row>
@@ -56,9 +53,8 @@ const formToCost = form => ({
   dueDate: form.dueDate
 })
 
-
 export default {
-  mixins: [CommonForm(costToForm, formToCost, '/api/specialcosts')],
+  mixins: [CommonForm(costToForm, formToCost, 'Sonderkosten', '/api/specialcosts')],
   components: {
     CostEditForm,
     NameTextField,
@@ -66,6 +62,6 @@ export default {
     IncomingSelect,
     MonthDatePicker
   },
-  props: ["btnText", "icon"]
+  props: ["btnText"]
 };
 </script>

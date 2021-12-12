@@ -13,18 +13,32 @@
               <cost-table
                 :entries="entries"
                 :cols="cols"
-                @edit-clicked="openEdit($event)"
+                @success="success"
+                @delete="deleteEntry"
               >
                 <template v-slot:edit-button="slotProps">
-                  <special-cost-form :cost="slotProps.entry"/>    
+                  <special-cost-form 
+                    :cost="slotProps.entry"
+                    @success="success"
+                  />    
                 </template>
               </cost-table>
             </v-card-text>
             <v-card-actions>
-              <special-cost-form btn-text="Neue Sonderkosten Hinzufügen" />
+              <special-cost-form 
+                btn-text="Neue Sonderkosten Hinzufügen" 
+                @success="success"
+              />
             </v-card-actions>
           </v-card>
         </v-skeleton-loader>
+        <v-snackbar 
+          v-model="snackbar" 
+          bottom 
+          color="success" 
+          :timeout="7000">
+            {{ successMsg }}
+        </v-snackbar>
       </v-col>
     </v-row>
   </v-container>
@@ -35,9 +49,7 @@ import LoadablePage from "./LoadablePage";
 import CostTable from "./CostTable";
 
 import {
-  CommonForm,
   toCurrency,
-  monthlyCostToForm,
   displayMonth
 } from "./Utils";
 import SpecialCostForm from './editform/SpecialCostForm.vue';
@@ -48,22 +60,8 @@ const cols = [
   { name: "dueDate", label: "Fällig am", transformer: displayMonth }
 ];
 
-const costToForm = cost => {
-  const form = monthlyCostToForm(cost);
-
-  return !cost
-    ? {
-        ...form,
-        dueYearMonth: null
-      }
-    : {
-        ...form,
-        dueYearMonth: cost.dueYearMonth
-      };
-};
-
 export default {
-  mixins: [LoadablePage, CommonForm(costToForm)],
+  mixins: [LoadablePage],
   components: {
     CostTable,
     SpecialCostForm
@@ -71,13 +69,38 @@ export default {
   data() {
     return {
       entries: [],
-      cols
+      cols,
+
+      snackbar: false,
+      successMsg: ""
     };
   },
   created: async function() {
-    const data = await this.fetchData("/api/specialcosts");
-    this.entries = data;
-    this.loaded = true;
+    this.loadData();
+  }, 
+  methods: {
+    loadData: async function() {
+      const data = await this.fetchData("/api/specialcosts");
+      this.entries = data;
+      this.loaded = true;
+    }, 
+    success: async function({name, cost, created}) {
+      this.snackbar = true;
+      this.successMsg = 
+        `${name} '${cost.name}' erfolgreich ${created ? "hinzugefügt" : "geändert"}`;
+      
+      this.loadData();
+    },
+    deleteEntry: async function({id, name}) {
+      await fetch("/api/specialcosts/" + id, {
+        method: "DELETE"
+      });
+
+      this.snackbar = true;
+      this.successMsg = `'${name}' wurde erfolgreich gelöscht`;
+
+      this.loadData();
+    },
   }
 };
 </script>
