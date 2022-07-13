@@ -39,7 +39,10 @@
           transition="scale-transition"
           class="mx-auto"
         >
-          <overview-table :entries="entries" />
+          <overview-table 
+            :entries="entries" 
+            @changed="loadData"  
+          />
         </v-skeleton-loader>
         <v-snackbar 
           v-model="snackbar" 

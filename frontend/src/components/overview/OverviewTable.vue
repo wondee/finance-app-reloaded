@@ -21,13 +21,28 @@
               :class="{ 'negative-amount': entry.currentAmount < 0}"
             >{{ entry.currentAmount | currency | responsive }}</td>
             <td align="right" class="action-cell">
-              <overview-details v-if="!entry.empty" :detail="{...entry, index}" />
-              <special-cost-form :cost="cost(index, entry.yearMonth)" icon="fa-plus-square"/>
+              <overview-details 
+                v-if="!entry.empty" 
+                :detail="{ ...entry, index }" 
+                @success="success"
+              />
+              <special-cost-form 
+                :cost="newEmptyCost(index, entry.yearMonth)" 
+                icon="fa-plus-square"
+                @success="success"
+              />
             </td>
           </tr>
         </tbody>
       </template>
     </v-simple-table>
+    <v-snackbar 
+      v-model="snackbar" 
+      bottom 
+      color="success" 
+      :timeout="7000">
+        {{ successMsg }}
+    </v-snackbar>
   </v-card>
 </template>
 <script>
@@ -43,7 +58,10 @@ export default {
   },
   data() {
     return {
-      month: "No Month"
+      month: "No Month",
+      
+      snackbar: false,
+      successMsg: ""
     };
   },
   filters: {
@@ -60,14 +78,24 @@ export default {
     }
   },
   methods: {
-    cost(index, dueYearMonth) {
+    newEmptyCost(index, dueDate) {
       return {
         index,
         name: "",
         amount: 0,
-        dueYearMonth
+        dueDate
       };
-    }
+    },
+    
+    success: async function({name, cost, created}) {
+      console.log('success', {name, cost, created})
+
+      this.snackbar = true;
+      this.successMsg = 
+        `${name} '${cost.name}' erfolgreich ${created ? "hinzugefügt" : "geändert"}`;
+      
+      this.$emit("changed");
+    },
   }
 };
 </script>

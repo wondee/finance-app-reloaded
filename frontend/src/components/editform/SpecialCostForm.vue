@@ -3,6 +3,7 @@
     :title="title('Sonderkosten Kosten')"
     :changed="changed"
     :btn-text="btnText"
+    :icon="icon"
     @save="saveCost"
   >
     <v-row>
@@ -66,6 +67,6 @@ export default {
     IncomingSelect,
     MonthDatePicker
   },
-  props: ["btnText"]
+  props: ["btnText", "icon"]
 };
 </script>

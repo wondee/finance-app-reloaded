@@ -2,7 +2,9 @@ package main
 
 import (
 	"net/http"
+	"sort"
 	"strconv"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 )
@@ -22,6 +24,7 @@ type OverviewEntry struct {
 }
 
 type CostDetail struct {
+	ID     int    `json:"id"`
 	Name   string `json:"name"`
 	Amount int    `json:"amount"`
 }
@@ -99,16 +102,25 @@ func createOverviewDetail(financeId int, n int) OverviewDetail {
 	if costs := specialCostMap[*yearMonth]; costs != nil {
 		for _, cost := range costs {
 			specialCosts = append(specialCosts, CostDetail{
+				ID:     cost.ID,
 				Name:   cost.Name,
 				Amount: cost.Amount,
 			})
 		}
 	}
 
+	sortCosts(fixedCosts)
+
 	return OverviewDetail{
 		FixedCosts:   fixedCosts,
 		SpecialCosts: specialCosts,
 	}
+}
+
+func sortCosts(array []CostDetail) {
+	sort.Slice(array, func(a, b int) bool {
+		return strings.ToLower(array[a].Name) < strings.ToLower(array[b].Name)
+	})
 }
 
 func determineDisplayType(dueMonth []int) string {

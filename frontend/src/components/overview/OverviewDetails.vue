@@ -23,7 +23,10 @@
                     <td>{{ cost.name }}</td>
                     <td>{{ cost.amount | currency }}</td>
                     <td align="right">
-                      <special-cost-form :cost="cost" />
+                      <special-cost-form 
+                        :cost="{ ...cost, dueDate: detail.yearMonth }"
+                        v-on="$listeners" 
+                      />
                       <delete-button :name="cost.name" @confirm="deleteSpecialCost(cost.id)" />
                     </td>
                   </tr>
